@@ -107,12 +107,21 @@ public class Estimator {
             // Since our messages are numbered, that means that if a message is higher than the left neighbour and lower than the right
             // it us ordered. Otherwise, it is reordered. 
 
-            // check for #0 and #n-1
+            for(int i = 0; i < received.size(); i++){
+                int left, cur, right;
+                try{
+                    left = Integer.parseInt(received.get(i-1));
+                } catch(IndexOutOfBoundsException e){
+                    left = Integer.MIN_VALUE;
+                }
 
-            for(int i = 1; i < received.size() - 1; i++){
-                int left = Integer.parseInt(received.get(i-1));
-                int cur = Integer.parseInt(received.get(i));
-                int right = Integer.parseInt(received.get(i+1));
+                cur = Integer.parseInt(received.get(i));
+                
+                try{
+                    right = Integer.parseInt(received.get(i+1));
+                } catch(IndexOutOfBoundsException e){
+                    right = Integer.MAX_VALUE;
+                }
                 
                 if(!(left <= cur && cur <= right)) {
                     reorder++;
