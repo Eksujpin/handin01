@@ -19,7 +19,7 @@ public class Estimator {
 
         int[] actual = Estimator.LostCounter(sent, received);
 
-        System.out.println(Array.);
+        System.out.println(Arrays.toString(actual));
     }
 
     public Estimator(int size, int number, int interval){
