@@ -15,11 +15,13 @@ public class Estimator {
         int toPort = 7007;
         est.estimate(from, toAddress, toPort);*/
         List<String> sent = new ArrayList<>(Arrays.asList("00", "01", "02", "03", "04", "05"));
-        List<String> received = new ArrayList<>(Arrays.asList("00", "01", "01", "03", "02", "05"));
+        List<String> received1 = new ArrayList<>(Arrays.asList("00", "01", "01", "03", "02", "05"));
+        List<String> received2 = new ArrayList<>(Arrays.asList("00", "01", "04", "05"));
+        List<String> received3 = new ArrayList<>(Arrays.asList("05", "04", "03", "02", "01", "00"));
 
-        int[] actual = Estimator.LostCounter(sent, received);
-
-        System.out.println(Arrays.toString(actual));
+        System.out.println(Arrays.toString(Estimator.LostCounter(sent, received1)));
+        System.out.println(Arrays.toString(Estimator.LostCounter(sent, received2)));
+        System.out.println(Arrays.toString(Estimator.LostCounter(sent, received3)));
     }
 
     public Estimator(int size, int number, int interval){
