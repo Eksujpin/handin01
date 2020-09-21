@@ -12,7 +12,8 @@ public class Estimator {
         var est = new Estimator(10, 10000, 10);
         var from = new DatagramSocket(8008);
         //var toAddress = InetAddress.getByName("localhost");
-        var toAddress = InetAddress.getByName("192.168.0.106");
+        //var toAddress = InetAddress.getByName("192.168.0.106");
+        var toAddress = InetAddress.getByName("192.168.0.107");
         int toPort = 7007;
         est.estimate(from, toAddress, toPort);
 
@@ -84,7 +85,7 @@ public class Estimator {
                 toEmpty.receive(response);
                 messages.add(new String(response.getData()));
             } catch(SocketTimeoutException e) {
-                System.out.println("Timed out!");
+               //System.out.println("Timed out!"); 
                 break;
             }
         }

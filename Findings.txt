@@ -9,3 +9,4 @@ the "places" they can be lost, duplicated or reordered is very limited.
 - 3 ethernet
 
 - internet across multiple nets
+We have not tested this as we had no one in the group able to do a port-fowarding.
