@@ -1,0 +1,9 @@
+In thise file you will be able to read our findings from mini project 1 part 2.
+
+- 1 Local connection on single machine
+
+- 2 Wifi
+
+- 3 ethernet
+
+- internet across multiple nets

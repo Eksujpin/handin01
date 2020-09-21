@@ -9,19 +9,23 @@ public class Estimator {
     private int interval;
 
     public static void main(String[] args)throws Exception{
-        /*var est = new Estimator(10, 200, 10);
+        var est = new Estimator(10, 10, 10);
         var from = new DatagramSocket(8008);
         var toAddress = InetAddress.getByName("localhost");
         int toPort = 7007;
-        est.estimate(from, toAddress, toPort);*/
-        List<String> sent = new ArrayList<>(Arrays.asList("00", "01", "02", "03", "04", "05"));
+        est.estimate(from, toAddress, toPort);
+
+        var wifiAddress = InetAddress.getByName("google.com");
+        int wifiPort = 9001;
+        est.estimate(from, wifiAddress, wifiPort);
+        /*List<String> sent = new ArrayList<>(Arrays.asList("00", "01", "02", "03", "04", "05"));
         List<String> received1 = new ArrayList<>(Arrays.asList("00", "01", "01", "03", "02", "05"));
         List<String> received2 = new ArrayList<>(Arrays.asList("00", "01", "04", "05"));
         List<String> received3 = new ArrayList<>(Arrays.asList("05", "04", "03", "02", "01", "00"));
 
         System.out.println(Arrays.toString(Estimator.LostCounter(sent, received1)));
         System.out.println(Arrays.toString(Estimator.LostCounter(sent, received2)));
-        System.out.println(Arrays.toString(Estimator.LostCounter(sent, received3)));
+        System.out.println(Arrays.toString(Estimator.LostCounter(sent, received3)));*/
     }
 
     public Estimator(int size, int number, int interval){
@@ -40,12 +44,17 @@ public class Estimator {
             DatagramPacket packet = new DatagramPacket(msgByte, msgByte.length, toAddress, toPort);
             
             from.send(packet);
-            System.out.print("sent " + message);
             TimeUnit.MILLISECONDS.sleep(interval);
         }
-        
-        System.out.println(LostCounter(sentMessages, emptySocket(from)));
-        
+
+        var receivedMessages = emptySocket(from);
+
+        var stats = LostCounter(sentMessages, receivedMessages); 
+
+        System.out.println(String.format("Lost messages: %d/%d, %.2f %%", stats[0], number, 100.0 * stats[0]/number));
+        System.out.println(String.format("Dublicated messages: %d/%d, %.2f %%", stats[1], number, 100.0 * stats[1]/number));
+        System.out.println(String.format("Reordered messages: %d/%d", stats[2], number, 100.0 * stats[2]/number));        
+
     }
 
     private String createZeroPaddedMessage(int size, String originalMessage){
@@ -65,13 +74,12 @@ public class Estimator {
          */
         List<String> messages = new ArrayList<>();
 
-        toEmpty.setSoTimeout(interval);
+        toEmpty.setSoTimeout(1000);
         while(true){
             try{
                 DatagramPacket response = new DatagramPacket(new byte[size], size);
                 toEmpty.receive(response);
                 messages.add(new String(response.getData()));
-                System.out.print("Received: " + new String(response.getData()));
             } catch(SocketTimeoutException e) {
                 System.out.println("Timed out!");
                 break;

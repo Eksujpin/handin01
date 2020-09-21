@@ -22,8 +22,8 @@ public class RFC862{
                     DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
                     aSocket.receive(reply);
 
-                    InetAddress aHost = InetAddress.getByName("localhost");
-                    DatagramPacket request = new DatagramPacket(reply.getData(), reply.getLength(), aHost, reply.getPort());
+                    //InetAddress aHost = InetAddress.getByName("localhost");
+                    DatagramPacket request = new DatagramPacket(reply.getData(), reply.getLength(), reply.getAddress(), reply.getPort());
                     aSocket.send(request);
 
         
