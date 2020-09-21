@@ -9,15 +9,14 @@ public class Estimator {
     private int interval;
 
     public static void main(String[] args)throws Exception{
-        var est = new Estimator(10, 10, 10);
+        var est = new Estimator(10, 10000, 10);
         var from = new DatagramSocket(8008);
-        var toAddress = InetAddress.getByName("localhost");
+        //var toAddress = InetAddress.getByName("localhost");
+        var toAddress = InetAddress.getByName("192.168.0.106");
         int toPort = 7007;
         est.estimate(from, toAddress, toPort);
 
-        var wifiAddress = InetAddress.getByName("google.com");
-        int wifiPort = 9001;
-        est.estimate(from, wifiAddress, wifiPort);
+       
         /*List<String> sent = new ArrayList<>(Arrays.asList("00", "01", "02", "03", "04", "05"));
         List<String> received1 = new ArrayList<>(Arrays.asList("00", "01", "01", "03", "02", "05"));
         List<String> received2 = new ArrayList<>(Arrays.asList("00", "01", "04", "05"));
@@ -36,6 +35,7 @@ public class Estimator {
 
     public void estimate(DatagramSocket from, InetAddress toAddress, int toPort) throws Exception{
         List<String> sentMessages = new ArrayList<>();
+        List<String> receivedMessages = new ArrayList<>();
         for(int i = 0; i < number; i++){
             
             var message = createZeroPaddedMessage(size, "" + i);
@@ -45,9 +45,12 @@ public class Estimator {
             
             from.send(packet);
             TimeUnit.MILLISECONDS.sleep(interval);
+            if(i % 1000 == 0){
+                receivedMessages.addAll(emptySocket(from));
+            }
         }
 
-        var receivedMessages = emptySocket(from);
+        receivedMessages.addAll(emptySocket(from));
 
         var stats = LostCounter(sentMessages, receivedMessages); 
 
@@ -74,7 +77,7 @@ public class Estimator {
          */
         List<String> messages = new ArrayList<>();
 
-        toEmpty.setSoTimeout(1000);
+        toEmpty.setSoTimeout(250);
         while(true){
             try{
                 DatagramPacket response = new DatagramPacket(new byte[size], size);
@@ -106,6 +109,7 @@ public class Estimator {
             //check for lost packets
             for(String message : sent){
                 if(!noDup.contains(message)){
+                    System.out.println(message);
                     lose++;
                 }
             }

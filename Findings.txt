@@ -1,6 +1,8 @@
 In thise file you will be able to read our findings from mini project 1 part 2.
 
 - 1 Local connection on single machine
+On local machine we found no lost, duplicated or reordered datagrams, this was as we expected as there shouldnt be any loss,duplicate, or reorder when sending from and to the same computer
+the "places" they can be lost, duplicated or reordered is very limited.
 
 - 2 Wifi
 
